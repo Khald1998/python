@@ -1,0 +1,18 @@
+import requests
+from bs4 import BeautifulSoup
+
+
+# The URL of the Wikipedia article
+url = 'https://en.wikipedia.org/wiki/Python_(programming_language)'
+
+# Send a GET request to the URL
+response = requests.get(url)
+
+# Parse the HTML content of the page using BeautifulSoup
+soup = BeautifulSoup(response.text, 'html.parser')
+
+# Loop through and print their text
+for w in soup.find_all(['p']): 
+    if w.string != None: 
+        print(w.string)
+    
