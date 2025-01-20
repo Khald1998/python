@@ -1,5 +1,5 @@
 import random
-from seleniumbase.common.exceptions import TimeoutException, NoSuchElementException
+from seleniumbase.common.exceptions import TimeoutException
 
 def get_random_window_size():
     """Return a random screen resolution from a set of typical sizes."""
