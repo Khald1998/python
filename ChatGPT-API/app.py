@@ -3,8 +3,6 @@ import random
 from fake_useragent import UserAgent
 from utils import get_random_window_size,check_url,find_prompt_area,human_like_prompt,wait_for_prompt,extract_prompt
 
-
-
 prompt = "say something random"
 
 with SB(uc=True, test=False, locale_code="en", agent=UserAgent().random, headless=True) as sb:
