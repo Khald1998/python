@@ -3,7 +3,7 @@ from app import generate_response
 
 app = Flask(__name__)
 
-@app.route('/api/generate', methods=['GET'])
+@app.route('/gpt', methods=['GET'])
 def generate():
     prompt = request.args.get('prompt')
     if not prompt:

@@ -5,9 +5,7 @@ from utils import get_random_window_size, check_url, find_prompt_area, human_lik
 
 def generate_response(prompt):
     with SB(uc=True, test=False, locale_code="en", agent=UserAgent().random, headless=True) as sb:
-        width, height, error = get_random_window_size()
-        if error:
-            return None, error
+        width, height = get_random_window_size()
         sb.set_window_size(width, height)
         url = "https://chatgpt.com/"
         sb.activate_cdp_mode(url)

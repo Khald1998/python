@@ -4,7 +4,7 @@ from seleniumbase.common.exceptions import TimeoutException, NoSuchElementExcept
 def get_random_window_size():
     """Return a random screen resolution from a set of typical sizes."""
     common_sizes = [(1920, 1080), (1600, 900), (1366, 768), (1536, 864), (1440, 900)]
-    return random.choice(common_sizes), None
+    return random.choice(common_sizes)
 
 def check_url(url, sb):
     try:
