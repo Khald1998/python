@@ -4,11 +4,6 @@ This project provides a simple API to interact with ChatGPT using SeleniumBase f
 
 ## Project Structure
 
-```
-pycache/ api.py app.py downloaded_files/ driver_fixing.lock pyautogui.lock utils.py
-
-```
-
 - `api.py`: Contains the Flask API implementation.
 - `app.py`: Contains the main logic to interact with ChatGPT using SeleniumBase.
 - `utils.py`: Contains utility functions used in `app.py`.
