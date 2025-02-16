@@ -1,0 +1,18 @@
+# Ignore Python bytecode files
+__pycache__/
+*.py[cod]
+
+# Ignore lock files
+*.lock
+
+# Ignore images
+images/
+
+# Ignore PDF files
+*.pdf
+
+# Ignore other common files
+*.log
+*.tmp
+*.bak
+*.swp
