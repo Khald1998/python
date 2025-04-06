@@ -8,12 +8,12 @@ images_folder = "images"
 if not os.path.exists(images_folder):
     os.makedirs(images_folder)
 
-with SB(uc=True, test=False, locale_code="en", headless=False) as sb:
+with SB(browser="edge",uc=True, test=False, locale_code="en", headless=False) as sb:
     sb.set_window_size(1920, 1080)
     # Define the range of question numbers (update as needed)
     start = 1
-    end = 268  # Example values; replace with your start/end values
-    cert = "Cloud Digital Leader"
+    end = 298  # Example values; replace with your start/end values
+    cert = "Associate Cloud Engineer"
     # List to store screenshot file paths (order matters)
     screenshot_files = []
 
@@ -21,9 +21,14 @@ with SB(uc=True, test=False, locale_code="en", headless=False) as sb:
     searxng_url = "https://search.labserver.cloud"
 
     for q in range(start, end + 1):
+        sb.sleep(2) # Wait for the screenshots to be saved
+        # Print the user agent
+        user_agent = sb.execute_script("return navigator.userAgent;")
+        print(f"User agent for question {q}: {user_agent}")
+
         # Build the query
         query = f"\"Exam {cert} topic 1 question {q} discussion\" site:examtopics.com"
-        query_text=f"Exam {cert} topic 1 question {q} discussion"
+        query_text=f"Exam {cert} topic 1 question {q}"
         # Open the Searxng search page
         sb.open(searxng_url)
         # Wait for the search box to be present and type the query
@@ -39,8 +44,9 @@ with SB(uc=True, test=False, locale_code="en", headless=False) as sb:
                 # Try to find the <a> tag inside the <h3> element
                 a_tag = h3.find_element("tag name", "a")
                 link_text = a_tag.text.strip()
+                # print(a_tag.get_attribute("href"))
                 # Compare the text with the query string exactly
-                if link_text == query_text:
+                if query_text.replace(" ", "-").lower() in a_tag.get_attribute("href").lower():
                     found = True
                     # Click the link to navigate to the result page
                     a_tag.click()
@@ -74,8 +80,11 @@ with SB(uc=True, test=False, locale_code="en", headless=False) as sb:
             solution_screenshot =  f"{images_folder}/screenshot_{q}_solution.png"
             sb.save_screenshot(solution_screenshot, selector="div.discussion-header-container")
             screenshot_files.append(solution_screenshot)
+            
+
         except Exception as e:
             print(f"Error processing question {q}: {e}")
+        
 
 from fpdf import FPDF
 from PIL import Image
