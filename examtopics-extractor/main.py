@@ -2,8 +2,13 @@ from seleniumbase import SB
 from fpdf import FPDF
 import os
 from PIL import Image
+import json
 
 images_folder = "images"
+
+# Load cookies from the JSON file
+cookies_file = "search.labserver.cloud_cookies.json"
+
 
 if not os.path.exists(images_folder):
     os.makedirs(images_folder)
@@ -12,8 +17,8 @@ with SB(browser="edge",uc=True, test=False, locale_code="en", headless=False) as
     sb.set_window_size(1920, 1080)
     # Define the range of question numbers (update as needed)
     start = 1
-    end = 298  # Example values; replace with your start/end values
-    cert = "Associate Cloud Engineer"
+    end = 130  # Example values; replace with your start/end values
+    cert = "EX200"
     # List to store screenshot file paths (order matters)
     screenshot_files = []
 
@@ -31,6 +36,7 @@ with SB(browser="edge",uc=True, test=False, locale_code="en", headless=False) as
         query_text=f"Exam {cert} topic 1 question {q}"
         # Open the Searxng search page
         sb.open(searxng_url)
+        sb.load_cookies(name="cookies.txt")
         # Wait for the search box to be present and type the query
         sb.type("input[name='q']", query)
         sb.submit("form")
@@ -64,7 +70,14 @@ with SB(browser="edge",uc=True, test=False, locale_code="en", headless=False) as
         try:
             sb.wait_for_element("div.discussion-header-container", timeout=10)
 
+            # Wait for the popup overlay to load
+            sb.wait_for_element("div.popup-overlay.show", timeout=10)
+            sb.wait(1)  # Wait for the popup to be fully visible
+            # Hide the popup overlay by setting its display style to none
+            sb.execute_script('document.querySelector("div.popup-overlay.show").style.display = "none";')
+            sb.wait(1)  # Wait for the popup to be hidden
             # Screenshot of the question content only
+            sb.scroll_to("div.discussion-header-container")  # Scroll to the question
             question_screenshot = f"{images_folder}/screenshot_{q}_question.png"
             sb.save_screenshot(question_screenshot, selector="div.discussion-header-container")
             screenshot_files.append(question_screenshot)
@@ -73,12 +86,13 @@ with SB(browser="edge",uc=True, test=False, locale_code="en", headless=False) as
             sb.click("a.btn.btn-primary.reveal-solution")
             # Wait for any potential changes (e.g. solution becomes visible)
             sb.wait_for_element("div.discussion-header-container", timeout=10)
-
-            sb.execute_script("window.scrollTo(0, 0);")
-
+            sb.wait(1)  # Wait for the solution to be fully visible
+            # sb.execute_script("window.scrollTo(0, 0);")
+            sb.scroll_to("div.question-answer")  # Scroll to the answer
+            sb.wait(1)
             # Screenshot of the solution (which is now revealed)
             solution_screenshot =  f"{images_folder}/screenshot_{q}_solution.png"
-            sb.save_screenshot(solution_screenshot, selector="div.discussion-header-container")
+            sb.save_screenshot(solution_screenshot, selector="div.question-answer")
             screenshot_files.append(solution_screenshot)
             
 
